@@ -3,6 +3,7 @@ package sample.net;
 import sample.domain.ChatRoom;
 import sample.domain.Message;
 import sample.domain.User;
+import sample.proto.EmojiParser;
 import sample.proto.JsonMessageParser;
 import sample.proto.ParseException;
 import sample.service.JavaAuditLogger;
@@ -36,6 +37,7 @@ public class ChatClienthandler implements Runnable{
             if (user == null) {
                 out.println("Brugernavn eller kodeord forkert. Prøv igen");
             } else {
+                ChatServer.userMap.put(user, out);
                 out.println("Velkommen " + userName + ". Hvilket rum vil du joine? Vælg 1 for gamechat, 2 for casualchat eller 3 for musikchat");
                 String choice = jsonMessageParser.parseMessage(in.readLine()).payload();
                 System.out.println(choice);
@@ -68,16 +70,34 @@ public class ChatClienthandler implements Runnable{
                 }
             } catch(IOException e){
                 System.out.println("Fejl i forbindelsen: " + e.getMessage());
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
+        } catch (ParseException ex) {
+            System.out.println("Fejl med parse" + ex.getMessage());
+        } finally {
+            try {
+                socket.close();
+                ChatServer.userMap.remove(user);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
+
     public void broadcast(String message, List<PrintWriter> clients) {
         synchronized(clients){
             for (PrintWriter client : clients) {
                 client.println(message);
             }
         }
+    }
+    public void unicast(String message, String recipient){
+        for (User user : ChatServer.userMap.keySet()) {
+            if (user.getUsername().equals(recipient)){
+                PrintWriter recipientOut = ChatServer.userMap.get(user);
+                recipientOut.println(message);
+                return;
+            }
+        }
+        System.out.println("Bruger '" + recipient + "' kan ikke findes");
     }
 
     private List<PrintWriter> getClientsByRoom(ChatRoom room) {
@@ -90,9 +110,18 @@ public class ChatClienthandler implements Runnable{
     private void handleMessage (Message message){
         switch (message.chatType()) {
             case TEXT -> broadcast(user.getUsername() + " | " + message.formattedTimestamp() + " | " + message.chatType() + " | " + message.payload(), getClientsByRoom(user.getChatRoom()));
-            case EMOJI ->
-                    broadcast(user.getUsername() + " sender emoji: " + message.payload(), getClientsByRoom(user.getChatRoom()));
+            case EMOJI -> {
+                String emoji = EmojiParser.parseEmoji(message.payload());
+                broadcast(user.getUsername() + " | " + message.formattedTimestamp() + " | " + message.chatType() + " | " + emoji, getClientsByRoom(user.getChatRoom()));
+            }
             case FILE_TRANSFER -> handleFiletransfer(message.payload());
+            case PRIVATE -> {
+                if (message.recipient() != null && !message.recipient().isBlank()) {
+                    unicast("Privat besked fra " + user.getUsername() + ": " + message.payload(), message.recipient());
+                } else {
+                    out.println("Der er ingen brugere med navnet: " + message.recipient());
+                }
+            }
             case JOIN_ROOM -> {
                 removeClientFromRoom();
                 try {
@@ -110,20 +139,7 @@ public class ChatClienthandler implements Runnable{
     }
 
     private void handleFiletransfer(String fileName) {
-        File file = new File("files/" + fileName);
-        if (!file.exists()) {
-            out.println("Fil findes ikke: " + fileName);
-            return;
-        }
-        try(BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            out.println("Indhold af " + fileName + ":");
-            String line;
-            while ((line = reader.readLine()) != null) {
-                out.println(line);
-            }
-        } catch (IOException e) {
-            out.println("Fejl ved læsning af fil: " + e.getMessage());
-        }
+
     }
     private void removeClientFromRoom(){
         if (user == null || out == null) {

@@ -1,7 +1,7 @@
 package sample.client;
 
 import com.google.gson.Gson;
-import sample.domain.MessageDTO;
+import sample.proto.MessageDTO;
 import sample.domain.ChatType;
 
 import java.net.*;
@@ -39,15 +39,27 @@ public class Client {
             while (true){
                 String rawInput = input.nextLine();
                 if (rawInput.startsWith("/")) {
-                    String[] parts = rawInput.trim().split("\\s+", 2);
+                    String[] parts = rawInput.trim().split("\\s+", 3);
                     ChatType command = ChatType.valueOf(parts[0].substring(1));
-                    String payload = parts.length > 1 ? parts[1] : "";
+                    if (command == ChatType.PRIVATE){
+                        if (parts.length < 3){
+                            System.out.println("Brug: /PRIVATE <modtager> <besked>");
+                            continue;
+                        }
+                        String recipient = parts[1];
+                        String payload = parts[2];
+                        MessageDTO message = new MessageDTO(username, command, payload, null, recipient);
+                        String json = gson.toJson(message);
+                        out.println(json);
+                    } else {
+                        String payload = parts.length > 1 ? parts[1] : "";
 
-                    MessageDTO message = new MessageDTO(username, command, payload, null);
-                    String json = gson.toJson(message);
-                    out.println(json);
+                        MessageDTO message = new MessageDTO(username, command, payload, null, "Public");
+                        String json = gson.toJson(message);
+                        out.println(json);
+                    }
                 } else {
-                    MessageDTO message = new MessageDTO(username, ChatType.TEXT, rawInput, null);
+                    MessageDTO message = new MessageDTO(username, ChatType.TEXT, rawInput, null, "Public");
                     out.println(gson.toJson(message));
                 }
 
@@ -57,5 +69,4 @@ public class Client {
             System.out.println("Fejl. Kan ikke forbinde til server: " + e.getMessage());
         }
     }
-
 }

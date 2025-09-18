@@ -18,6 +18,7 @@ public class JsonMessageParser implements MessageParser {
         String clientId;
         String chatType;
         String payload;
+        String recipient;
     }
     @Override
     public Message parseMessage(String message) throws ParseException {
@@ -41,7 +42,7 @@ public class JsonMessageParser implements MessageParser {
 //                timestamp = Instant.now();
 //            }
 
-            return new Message(dto.clientId, Instant.now(), chatType, dto.payload);
+            return new Message(dto.clientId, Instant.now(), chatType, dto.payload, dto.recipient);
         } catch (JsonSyntaxException e) {
             throw new ParseException("Mangler felter i JSON: " + message, e);
         }
