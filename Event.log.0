@@ -1,0 +1,50 @@
+sep. 16, 2025 1:32:09 PM sample.service.JavaAuditLogger logEvent
+INFO: bob16-09-2025 13:32:09GAMETEXThej 
+sep. 16, 2025 1:32:13 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj16-09-2025 13:32:13GAMETEXThej
+sep. 16, 2025 1:35:51 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 16-09-2025 13:35:51 | GAME | TEXT | hvad sker der i dag?
+sep. 16, 2025 1:36:07 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 16-09-2025 13:36:07 | GAME | TEXT | Det ved jeg ikke kaj. Har du det godt?
+sep. 16, 2025 1:36:14 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 16-09-2025 13:36:14 | GAME | TEXT | super godt, bob
+sep. 18, 2025 12:51:48 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 18-09-2025 12:51:48 | GAME | TEXT | :smile: | null
+sep. 18, 2025 12:52:27 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 18-09-2025 12:52:27 | GAME | EMOJI | :smile: | null
+sep. 18, 2025 12:52:56 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 18-09-2025 12:52:56 | GAME | PRIVATE | hej kaj | kaj
+sep. 18, 2025 12:53:55 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 18-09-2025 12:53:55 | GAME | PRIVATE | hej igen | kaj
+sep. 18, 2025 12:54:21 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 18-09-2025 12:54:21 | CHATTING | PRIVATE | hej | bob
+sep. 18, 2025 12:54:37 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 18-09-2025 12:54:37 | GAME | PRIVATE | hej | kaj
+sep. 18, 2025 1:01:41 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 18-09-2025 13:01:41 | GAME | PRIVATE | hej | kaj
+sep. 18, 2025 1:02:44 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 18-09-2025 13:02:44 | GAME | PRIVATE | hej | bob
+sep. 18, 2025 1:03:13 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 18-09-2025 13:03:13 | GAME | EMOJI | 😀 | null
+sep. 18, 2025 1:03:34 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 18-09-2025 13:03:34 | GAME | EMOJI | :smile: | null
+sep. 18, 2025 1:03:49 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 18-09-2025 13:03:49 | GAME | EMOJI | 0x1F604 | null
+sep. 18, 2025 1:04:01 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 18-09-2025 13:04:01 | GAME | EMOJI | :thumbsup: | null
+sep. 18, 2025 1:33:14 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 18-09-2025 13:33:14 | GAME | TEXT | :smile: | null
+sep. 18, 2025 1:33:23 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 18-09-2025 13:33:23 | GAME | EMOJI | :smile: | null
+sep. 18, 2025 1:37:18 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 18-09-2025 13:37:18 | GAME | EMOJI | 😄 | null
+sep. 18, 2025 1:38:20 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 18-09-2025 13:38:20 | GAME | TEXT | hej | null
+sep. 19, 2025 9:49:40 AM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 19-09-2025 09:49:40 | GAME | TEXT | Hello' kitty | Public
+sep. 19, 2025 9:50:19 AM sample.service.JavaAuditLogger logEvent
+INFO: bob | 19-09-2025 09:50:19 | GAME | TEXT | Hej kaj | Public
+sep. 19, 2025 9:50:23 AM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 19-09-2025 09:50:23 | GAME | TEXT | hej bob | Public
+sep. 19, 2025 9:50:37 AM sample.service.JavaAuditLogger logEvent
+INFO: bob | 19-09-2025 09:50:36 | GAME | EMOJI | 👍 | Public

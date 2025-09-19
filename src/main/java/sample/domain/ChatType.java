@@ -3,7 +3,10 @@ package sample.domain;
 public enum ChatType {
     TEXT,
     EMOJI,
-    FILE_TRANSFER,
+    FILE_OFFER,
     JOIN_ROOM,
-    PRIVATE
+    PRIVATE,
+    FILE_ACCEPT,
+    FILE_REJECT,
+    FILE_PORT
 }
