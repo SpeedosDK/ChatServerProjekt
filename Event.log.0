@@ -48,3 +48,67 @@ sep. 19, 2025 9:50:23 AM sample.service.JavaAuditLogger logEvent
 INFO: kaj | 19-09-2025 09:50:23 | GAME | TEXT | hej bob | Public
 sep. 19, 2025 9:50:37 AM sample.service.JavaAuditLogger logEvent
 INFO: bob | 19-09-2025 09:50:36 | GAME | EMOJI | 👍 | Public
+sep. 19, 2025 11:17:55 AM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 19-09-2025 11:17:55 | GAME | FILE_OFFER | kaj|1758273475605|FILE_OFFER|satchel.png|240711 | bob
+sep. 19, 2025 11:18:11 AM sample.service.JavaAuditLogger logEvent
+INFO: bob | 19-09-2025 11:18:11 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 19, 2025 11:23:11 AM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 19-09-2025 11:23:11 | GAME | FILE_OFFER | kaj|1758273790830|FILE_OFFER|satchel.png|240711 | bob
+sep. 19, 2025 11:23:17 AM sample.service.JavaAuditLogger logEvent
+INFO: bob | 19-09-2025 11:23:17 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 19, 2025 11:24:16 AM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 19-09-2025 11:24:16 | GAME | FILE_OFFER | kaj|1758273856488|FILE_OFFER|satchel.png|240711 | bob
+sep. 19, 2025 11:24:23 AM sample.service.JavaAuditLogger logEvent
+INFO: bob | 19-09-2025 11:24:23 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 19, 2025 11:55:12 AM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 19-09-2025 11:55:12 | GAME | FILE_OFFER | kaj|1758275712437|FILE_OFFER|satchel.png|240711 | bob
+sep. 19, 2025 11:56:10 AM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 19-09-2025 11:56:10 | GAME | FILE_OFFER | kaj|1758275770507|FILE_OFFER|satchel.png|240711 | bob
+sep. 19, 2025 11:56:16 AM sample.service.JavaAuditLogger logEvent
+INFO: bob | 19-09-2025 11:56:16 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 19, 2025 12:05:48 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 19-09-2025 12:05:48 | GAME | FILE_OFFER | bob|1758276348091|FILE_OFFER|Background.png|28276 | kaj
+sep. 19, 2025 12:05:57 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 19-09-2025 12:05:57 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 19, 2025 12:10:34 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 19-09-2025 12:10:34 | GAME | FILE_OFFER | kaj|1758276633671|FILE_OFFER|satchel.png|240711 | bob
+sep. 19, 2025 12:10:39 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 19-09-2025 12:10:39 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 19, 2025 12:27:38 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 19-09-2025 12:27:38 | GAME | FILE_OFFER | bob|1758277658506|FILE_OFFER|Background.png|28276 | kaj
+sep. 19, 2025 12:27:45 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 19-09-2025 12:27:45 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 19, 2025 12:29:53 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 19-09-2025 12:29:53 | GAME | FILE_OFFER | bob|1758277793279|FILE_OFFER|Background.png|28276 | kaj
+sep. 19, 2025 12:29:59 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 19-09-2025 12:29:59 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 19, 2025 12:31:30 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 19-09-2025 12:31:30 | GAME | FILE_OFFER | bob|1758277890215|FILE_OFFER|Background.png|28276 | kaj
+sep. 19, 2025 12:31:36 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 19-09-2025 12:31:36 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 19, 2025 12:37:50 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 19-09-2025 12:37:50 | GAME | FILE_OFFER | bob|1758278270114|FILE_OFFER|Background.png|28276 | kaj
+sep. 19, 2025 12:37:58 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 19-09-2025 12:37:58 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 19, 2025 1:13:53 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 19-09-2025 13:13:53 | GAME | FILE_OFFER | kaj|1758280433940|FILE_OFFER|Background.png|28276 | bob
+sep. 19, 2025 1:14:02 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 19-09-2025 13:14:02 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 19, 2025 1:15:54 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 19-09-2025 13:15:54 | GAME | FILE_OFFER | kaj|1758280554221|FILE_OFFER|Background.png|28276 | bob
+sep. 19, 2025 1:16:00 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 19-09-2025 13:16:00 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 19, 2025 1:41:14 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 19-09-2025 13:41:14 | GAME | FILE_OFFER | bob|1758282074352|FILE_OFFER|Background.png|28276 | kaj
+sep. 19, 2025 1:41:20 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 19-09-2025 13:41:20 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 19, 2025 1:44:12 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 19-09-2025 13:44:12 | GAME | FILE_OFFER | bob|1758282252684|FILE_OFFER|Background.png|28276 | kaj
+sep. 19, 2025 1:44:19 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 19-09-2025 13:44:19 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 19, 2025 1:44:31 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 19-09-2025 13:44:31 | GAME | TEXT | Hej  | null
+sep. 19, 2025 1:44:43 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 19-09-2025 13:44:43 | GAME | TEXT | :smile: | null
+sep. 19, 2025 1:44:49 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 19-09-2025 13:44:49 | GAME | EMOJI | 😄 | null

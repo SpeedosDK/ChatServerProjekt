@@ -2,6 +2,7 @@ package sample.net;
 
 import com.google.gson.Gson;
 import sample.domain.*;
+import sample.proto.EmojiParser;
 import sample.proto.JsonMessageParser;
 import sample.proto.MessageDTO;
 import sample.proto.ParseException;
@@ -104,9 +105,13 @@ public class ChatClienthandler implements Runnable{
     }
     private void handleMessage (Message message){
         switch (message.chatType()) {
-            case TEXT -> broadcast(user.getUsername() + " | " + message.formattedTimestamp() + " | " + message.chatType() + " | " + message.payload(), getClientsByRoom(user.getChatRoom()));
-            case EMOJI ->
-                    broadcast(user.getUsername() + " sender emoji: " + message.payload(), getClientsByRoom(user.getChatRoom()));
+            case TEXT ->
+                    broadcast(user.getUsername() + " | " + message.formattedTimestamp() + " | " + message.chatType() + " | " + message.payload(), getClientsByRoom(user.getChatRoom()));
+            case EMOJI -> {
+                String emoji = EmojiParser.parseEmoji(message.payload());
+                broadcast(user.getUsername() + " | " + message.formattedTimestamp() + " | " + message.chatType() + " | " + emoji, getClientsByRoom(user.getChatRoom()));
+            }
+
             case FILE_OFFER -> {
                 String[] parts = message.payload().split("\\|");
                 if (parts.length != 5) {
@@ -226,31 +231,6 @@ public class ChatClienthandler implements Runnable{
         }
     }
 
-    private void handleFiletransfer(FileOffer offer) {
-        File outputFile = new File("received_files/" +  offer.fileName);
-        outputFile.getParentFile().mkdirs();
-        out.println("Filoverførsel starter");
-        try (
-                BufferedInputStream inputStream = new BufferedInputStream(socket.getInputStream());
-                FileOutputStream outputStream = new FileOutputStream(outputFile)
-        ){
-            byte[] buffer = new byte[4096];
-            long bytesReadTotal = 0;
-            while (bytesReadTotal < offer.fileSize) {
-                int bytesToRead = (int) Math.min(buffer.length, offer.fileSize - bytesReadTotal);
-                int bytesRead = inputStream.read(buffer, 0, bytesToRead);
-                if (bytesRead == -1) {
-                    break;
-                }
-                outputStream.write(buffer, 0, bytesRead);
-                bytesReadTotal += bytesRead;
-            }
-            out.println("Fil '" + offer.fileName + "' modtaget fra " + offer.sender);
-        }
-        catch (IOException e) {
-            out.println("Fejl under overførsel af filen '" + offer.fileName + "': " + e.getMessage());
-        }
-    }
     private void removeClientFromRoom(){
         if (user == null || out == null) {
             return;
@@ -260,34 +240,6 @@ public class ChatClienthandler implements Runnable{
             clients.remove(out);
         }
         broadcast("User " + user.getUsername() + " har forladt rummet", clients);
-    }
-    /** Åbner en midlertidig ServerSocket på port 0, returnerer den tildelte port */
-    private int findFreePort() throws IOException {
-        try (ServerSocket ss = new ServerSocket(0)) {
-            return ss.getLocalPort();
-        }
-    }
-
-    /** Accepterer én forbindelse og skriver filen til disk */
-    private void startFileServer(int port, FileOffer offer) {
-        try (
-                ServerSocket server = new ServerSocket(port);
-                Socket fsocket = server.accept();
-                BufferedInputStream bis = new BufferedInputStream(fsocket.getInputStream());
-                FileOutputStream fos = new FileOutputStream("received_files/" + offer.fileName)
-        ) {
-            byte[] buf = new byte[4096];
-            long total = 0;
-            int r;
-            while ((r = bis.read(buf)) != -1 && total < offer.fileSize) {
-                fos.write(buf, 0, r);
-                total += r;
-            }
-            fos.flush();
-            unicast("Fil modtaget: " + offer.fileName, offer.sender);
-        } catch (IOException e) {
-            unicast("Fejl under modtagelse af fil '" + offer.fileName + "': " + e.getMessage(), offer.sender);
-        }
     }
 
 }

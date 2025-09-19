@@ -203,7 +203,7 @@ public class Client {
                                                     int port,
                                                     long fileSize) {
         try {
-            Thread.sleep(5000); // 1 sekund forsinkelse
+            Thread.sleep(1000); // 1 sekund forsinkelse
         } catch (InterruptedException ignored) {}
 
         try (
