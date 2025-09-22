@@ -112,3 +112,27 @@ sep. 19, 2025 1:44:43 PM sample.service.JavaAuditLogger logEvent
 INFO: kaj | 19-09-2025 13:44:43 | GAME | TEXT | :smile: | null
 sep. 19, 2025 1:44:49 PM sample.service.JavaAuditLogger logEvent
 INFO: kaj | 19-09-2025 13:44:49 | GAME | EMOJI | 😄 | null
+sep. 22, 2025 9:35:14 AM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 22-09-2025 09:35:14 | GAME | TEXT | lslsl | null
+sep. 22, 2025 1:48:40 PM sample.service.JavaAuditLogger logEvent
+INFO: Thomas | 22-09-2025 13:48:40 | GAME | JOIN_ROOM | CHATTING | null
+sep. 22, 2025 1:49:02 PM sample.service.JavaAuditLogger logEvent
+INFO: Thomas | 22-09-2025 13:49:02 | CHATTING | FILE_OFFER | Thomas|1758541742325|FILE_OFFER|satchel.png|240711 | kaj
+sep. 22, 2025 1:49:11 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 22-09-2025 13:49:11 | CHATTING | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 22, 2025 1:50:43 PM sample.service.JavaAuditLogger logEvent
+INFO: Thomas | 22-09-2025 13:50:43 | CHATTING | FILE_OFFER | Thomas|1758541843490|FILE_OFFER|satchel.png|240711 | kaj
+sep. 22, 2025 1:50:53 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 22-09-2025 13:50:53 | CHATTING | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 22, 2025 1:53:20 PM sample.service.JavaAuditLogger logEvent
+INFO: Thomas | 22-09-2025 13:53:20 | GAME | FILE_OFFER | Thomas|1758542000327|FILE_OFFER|satchel.png|240711 | kaj
+sep. 22, 2025 1:53:28 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 22-09-2025 13:53:28 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 22, 2025 1:54:49 PM sample.service.JavaAuditLogger logEvent
+INFO: Thomas | 22-09-2025 13:54:49 | GAME | FILE_OFFER | Thomas|1758542089893|FILE_OFFER|satchel.png|240711 | kaj
+sep. 22, 2025 1:54:57 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 22-09-2025 13:54:57 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 22, 2025 2:30:38 PM sample.service.JavaAuditLogger logEvent
+INFO: Thomas | 22-09-2025 14:30:38 | GAME | FILE_OFFER | Thomas|1758544238180|FILE_OFFER|satchel.png|240711 | kaj
+sep. 22, 2025 2:30:46 PM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 22-09-2025 14:30:46 | GAME | FILE_ACCEPT | FILE_ACCEPT | null

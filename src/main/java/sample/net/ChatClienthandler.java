@@ -1,11 +1,10 @@
 package sample.net;
 
-import com.google.gson.Gson;
 import sample.domain.*;
 import sample.proto.EmojiParser;
 import sample.proto.JsonMessageParser;
-import sample.proto.MessageDTO;
 import sample.proto.ParseException;
+import sample.service.ServerFileService;
 import sample.service.JavaAuditLogger;
 import sample.service.UserService;
 
@@ -17,17 +16,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ChatClienthandler implements Runnable{
+public class ChatClienthandler implements Runnable, MessageSender {
     private final Socket socket;
     private final UserService userService = new UserService();
     private final JsonMessageParser jsonMessageParser = new JsonMessageParser();
     private final JavaAuditLogger auditLogger = new JavaAuditLogger();
     private PrintWriter out;
     private User user;
-    private final static Map<String, FileOffer> pendingFiles = Collections.synchronizedMap(new HashMap<>());
+    private String userName;
+    private final Map<String, FileOffer> pendingFiles;
+    private final Map<User ,PrintWriter> userMap;
+    private final List<PrintWriter> gameClients;
+    private final List<PrintWriter> chattingClients;
+    private final List<PrintWriter> musicClients;
 
-    public ChatClienthandler(Socket socket) {
+    private ServerFileService serverFileService;
+
+    public ChatClienthandler(Socket socket, Map<String, FileOffer> pendingFiles, Map<User ,PrintWriter> userMap, List<PrintWriter> gameClients, List<PrintWriter> chattingClients,List<PrintWriter> musicClients) {
         this.socket = socket;
+        this.pendingFiles = pendingFiles;
+        this.serverFileService = new ServerFileService(this,  pendingFiles);
+        this.userMap = userMap;
+        this.gameClients = gameClients;
+        this.chattingClients = chattingClients;
+        this.musicClients = musicClients;
     }
 
     @Override
@@ -35,49 +47,60 @@ public class ChatClienthandler implements Runnable{
         try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
         ) {
             out = new PrintWriter(socket.getOutputStream(), true);
-            String userName = in.readLine();
-            String password = in.readLine();
-            user = userService.login(userName, password);
-            if (user == null) {
-                out.println("Brugernavn eller kodeord forkert. Prøv igen");
-            } else {
-                ChatServer.userMap.put(user, out);
-                out.println("Velkommen " + userName + ". Hvilket rum vil du joine? Vælg 1 for gamechat, 2 for casualchat eller 3 for musikchat");
-                String choice = jsonMessageParser.parseMessage(in.readLine()).payload();
-                System.out.println(choice);
-                switch (choice) {
-                    case "1":
-                        user.setChatRoom(ChatRoom.GAME);
-                        ChatServer.gameClients.add(out);
-                        break;
-                    case "2":
-                        user.setChatRoom(ChatRoom.CHATTING);
-                        ChatServer.chattingClients.add(out);
-                        break;
-                    case "3":
-                        user.setChatRoom(ChatRoom.MUSIC);
-                        ChatServer.musicClients.add(out);
-                        break;
+            while (user == null) {
+                String userName = in.readLine();
+                String password = in.readLine();
+                user = userService.login(userName, password);
+                if (user == null) {
+                    out.println("Brugernavn eller kodeord forkert. Prøv igen");
+                } else {
+                    out.println("loggedIn");
                 }
-                broadcast(userName + " er tilsluttet chatrummet " + user.getChatRoom(), getClientsByRoom(user.getChatRoom()));
-                String inputLine;
-                while ((inputLine = in.readLine()) != null) {
-                    try {
-                        Message msg = jsonMessageParser.parseMessage(inputLine);
-                        auditLogger.logEvent(msg, user);
-                        handleMessage(msg);
-                    } catch (Exception e) {
-                        out.println("Fejl i besked: " + e.getMessage());
-                    }
-                }
-
             }
+
+
+            userMap.put(user, out);
+            userName = user.getUsername();
+            out.println("Velkommen " + userName + ". Hvilket rum vil du joine? Vælg 1 for gamechat, 2 for casualchat eller 3 for musikchat");
+            String choice = jsonMessageParser.parseMessage(in.readLine()).payload();
+            System.out.println(choice);
+            switch (choice) {
+                case "1":
+                    user.setChatRoom(ChatRoom.GAME);
+                    gameClients.add(out);
+                    break;
+                case "2":
+                    user.setChatRoom(ChatRoom.CHATTING);
+                    chattingClients.add(out);
+                    break;
+                case "3":
+                    user.setChatRoom(ChatRoom.MUSIC);
+                    musicClients.add(out);
+                    break;
+                default:
+                    user.setChatRoom(ChatRoom.CHATTING);
+                    chattingClients.add(out);
+                    break;
+            }
+            broadcast(userName + " er tilsluttet chatrummet " + user.getChatRoom(), getClientsByRoom(user.getChatRoom()));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                try {
+                    Message msg = jsonMessageParser.parseMessage(inputLine);
+                    auditLogger.logEvent(msg, user);
+                    handleMessage(msg);
+                } catch (Exception e) {
+                    out.println("Fejl i besked: " + e.getMessage());
+                }
+            }
+
         } catch(IOException e){
             System.out.println("Fejl i forbindelsen: " + e.getMessage());
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
     }
+    @Override
     public void broadcast(String message, List<PrintWriter> clients) {
         synchronized(clients){
             for (PrintWriter client : clients) {
@@ -85,10 +108,11 @@ public class ChatClienthandler implements Runnable{
             }
         }
     }
+    @Override
     public void unicast(String message,String recipientUserName){
-        for (User user : ChatServer.userMap.keySet()){
+        for (User user : userMap.keySet()){
             if (user.getUsername().equals(recipientUserName)){
-                PrintWriter recipientOut = ChatServer.userMap.get(user);
+                PrintWriter recipientOut = userMap.get(user);
                 recipientOut.println(message);
                 return;
             }
@@ -98,9 +122,9 @@ public class ChatClienthandler implements Runnable{
 
     private List<PrintWriter> getClientsByRoom(ChatRoom room) {
         return switch (room) {
-            case GAME -> ChatServer.gameClients;
-            case CHATTING -> ChatServer.chattingClients;
-            case MUSIC -> ChatServer.musicClients;
+            case GAME -> gameClients;
+            case CHATTING -> chattingClients;
+            case MUSIC -> musicClients;
         };
     }
     private void handleMessage (Message message){
@@ -118,88 +142,12 @@ public class ChatClienthandler implements Runnable{
                     out.println("Ugyldig metadata for filoverførsel");
                     return;
                 }
-                String sender = parts[0];
-                String timestamp = parts[1];
-                String filename = parts[3];
-                long fileSize = Long.parseLong(parts[4]);
-                String recipient = message.recipient();
-
-                pendingFiles.put(recipient, new FileOffer(sender, recipient, filename, fileSize));
-                unicast(sender + " vil sende dig filen '" + filename + "' (Størrelse: " + fileSize + " bytes. Svar /FILE_ACCEPT eller /FILE_REJECT.", recipient);
+                String[] fileOffer  = serverFileService.offerFile(message, parts);
+                unicast(fileOffer[0], fileOffer[1]);
             }
             case FILE_ACCEPT -> {
-                FileOffer offer = pendingFiles.remove(user.getUsername());
-                if (offer == null) {
-                    out.println("Ingen ventende filer");
-                    return;
-                }
-
-                int filePort;
-                try (ServerSocket tmp = new ServerSocket(0)) {
-                    filePort = tmp.getLocalPort();
-                } catch (IOException e) {
-                    out.println("Kunne ikke allokere port til filtransfer");
-                    e.printStackTrace();
-                    return; // VIGTIGT: Stop videre brug af filePort
-                }
-
-                // Nu er filePort garanteret initialiseret
-                MessageDTO toSender = new MessageDTO(
-                        "server",
-                        ChatType.FILE_PORT,
-                        filePort + "|UPLOAD",
-                        null,
-                        offer.sender
-                );
-                MessageDTO toReceiver = new MessageDTO(
-                        "server",
-                        ChatType.FILE_PORT,
-                        filePort + "|DOWNLOAD|" + offer.fileName + "|" + offer.fileSize,
-                        null,
-                        offer.recipient
-                );
-                unicast(new Gson().toJson(toSender), offer.sender);
-                unicast(new Gson().toJson(toReceiver), offer.recipient);
-
-                new Thread(() -> {
-                    try (ServerSocket srv = new ServerSocket(filePort)) {
-                        // Upload fra afsender
-                        try (
-                                Socket uploadSock = srv.accept();
-                                BufferedInputStream bis = new BufferedInputStream(uploadSock.getInputStream());
-                                FileOutputStream fos = new FileOutputStream("server_files/" + offer.fileName)
-                        ) {
-                            byte[] buf = new byte[4096];
-                            long total = 0;
-                            int r;
-                            while ((r = bis.read(buf)) != -1 && total < offer.fileSize) {
-                                fos.write(buf, 0, r);
-                                total += r;
-                            }
-                        }
-
-                        // Download til modtager
-                        try (
-                                Socket downloadSock = srv.accept();
-                                BufferedOutputStream bos = new BufferedOutputStream(downloadSock.getOutputStream());
-                                FileInputStream fis = new FileInputStream("server_files/" + offer.fileName)
-                        ) {
-                            byte[] buf = new byte[4096];
-                            int r;
-                            while ((r = fis.read(buf)) != -1) {
-                                bos.write(buf, 0, r);
-                            }
-                            bos.flush();
-                        }
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }).start();
+                serverFileService.acceptFile(user, out);
             }
-
-
-
             case FILE_REJECT -> {
                 FileOffer offer = pendingFiles.remove(user.getUsername());
                 if (offer != null) {
@@ -216,18 +164,22 @@ public class ChatClienthandler implements Runnable{
                 }
             }
             case JOIN_ROOM -> {
-                removeClientFromRoom();
-                try {
-                    ChatRoom chatRoom = ChatRoom.valueOf(message.payload().trim().toUpperCase());
-                    user.setChatRoom(chatRoom);
-                    getClientsByRoom(chatRoom).add(out);
-                    broadcast("Bruger " + user.getUsername() + " har skiftet til chatrummet " + chatRoom, getClientsByRoom(chatRoom));
-                    out.println("Du er nu i rummet: " + chatRoom);
-                } catch (IllegalArgumentException e) {
-                    out.println("Ugyldigt chatrum: " + message.payload());
-                    getClientsByRoom(user.getChatRoom()).add(out);
-                }
+                joinRoom(message);
             }
+        }
+    }
+
+    private void joinRoom(Message message) {
+        removeClientFromRoom();
+        try {
+            ChatRoom chatRoom = ChatRoom.valueOf(message.payload().trim().toUpperCase());
+            user.setChatRoom(chatRoom);
+            getClientsByRoom(chatRoom).add(out);
+            broadcast("Bruger " + user.getUsername() + " har skiftet til chatrummet " + chatRoom, getClientsByRoom(chatRoom));
+            out.println("Du er nu i rummet: " + chatRoom);
+        } catch (IllegalArgumentException e) {
+            out.println("Ugyldigt chatrum: " + message.payload());
+            getClientsByRoom(user.getChatRoom()).add(out);
         }
     }
 
@@ -241,5 +193,4 @@ public class ChatClienthandler implements Runnable{
         }
         broadcast("User " + user.getUsername() + " har forladt rummet", clients);
     }
-
 }
