@@ -8,8 +8,10 @@ import sample.domain.ChatType;
 import sample.domain.Message;
 import sample.domain.User;
 import sample.proto.EmojiParser;
+import sample.proto.IEmojiParser;
 
 public class JavaAuditLogger implements AuditLogger {
+    private final IEmojiParser emojiParser = new EmojiParser();
     private static final Logger eventLogger = Logger.getLogger("EventLogger");
     private static final DateTimeFormatter DTF = DateTimeFormatter.ISO_INSTANT;
 
@@ -29,7 +31,7 @@ public class JavaAuditLogger implements AuditLogger {
     public void logEvent(Message message, User user) {
         String logText;
         if (message.chatType() == ChatType.EMOJI){
-            String emoji = EmojiParser.parseEmoji(message.payload());
+            String emoji = emojiParser.parseEmoji(message.payload());
             logText = String.format(message.clientId() + " | " + message.formattedTimestamp() + " | " + user.getChatRoom() + " | " + message.chatType() + " | " +  emoji + " | " + message.recipient());
             eventLogger.info(logText);
             return;

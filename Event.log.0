@@ -136,3 +136,65 @@ sep. 22, 2025 2:30:38 PM sample.service.JavaAuditLogger logEvent
 INFO: Thomas | 22-09-2025 14:30:38 | GAME | FILE_OFFER | Thomas|1758544238180|FILE_OFFER|satchel.png|240711 | kaj
 sep. 22, 2025 2:30:46 PM sample.service.JavaAuditLogger logEvent
 INFO: kaj | 22-09-2025 14:30:46 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 23, 2025 10:21:07 AM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 23-09-2025 10:21:07 | GAME | FILE_OFFER | kaj|1758615667798|FILE_OFFER|Background.png|28276 | bob
+sep. 23, 2025 10:21:13 AM sample.service.JavaAuditLogger logEvent
+INFO: bob | 23-09-2025 10:21:13 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 23, 2025 10:50:05 AM sample.service.JavaAuditLogger logEvent
+INFO: bob | 23-09-2025 10:50:05 | GAME | FILE_OFFER | bob|1758617405865|FILE_OFFER|Background.png|28276 | kaj
+sep. 23, 2025 10:50:12 AM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 23-09-2025 10:50:12 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 23, 2025 10:52:32 AM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 23-09-2025 10:52:32 | GAME | FILE_OFFER | kaj|1758617552533|FILE_OFFER|Racekatteklubben.docx|944010 | bob
+sep. 23, 2025 10:52:40 AM sample.service.JavaAuditLogger logEvent
+INFO: bob | 23-09-2025 10:52:40 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 23, 2025 10:55:34 AM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 23-09-2025 10:55:34 | GAME | TEXT | FILE_OFFER bob Racekatteklubben.docx | null
+sep. 23, 2025 10:55:43 AM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 23-09-2025 10:55:43 | GAME | FILE_OFFER | kaj|1758617743805|FILE_OFFER|Racekatteklubben.docx|944010 | bob
+sep. 23, 2025 10:55:52 AM sample.service.JavaAuditLogger logEvent
+INFO: bob | 23-09-2025 10:55:52 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 23, 2025 11:02:55 AM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 23-09-2025 11:02:55 | GAME | FILE_OFFER | kaj|1758618175483|FILE_OFFER|4x matematik noter.docx|17605738 | bob
+sep. 23, 2025 11:03:05 AM sample.service.JavaAuditLogger logEvent
+INFO: bob | 23-09-2025 11:03:05 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 23, 2025 11:22:44 AM sample.service.JavaAuditLogger logEvent
+INFO: bob | 23-09-2025 11:22:44 | GAME | TEXT | FILE_OFFER kaj 4x matematik noter.docx | null
+sep. 23, 2025 11:22:50 AM sample.service.JavaAuditLogger logEvent
+INFO: bob | 23-09-2025 11:22:50 | GAME | FILE_OFFER | bob|1758619370156|FILE_OFFER|4x matematik noter.docx|17605738 | kaj
+sep. 23, 2025 11:22:57 AM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 23-09-2025 11:22:57 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 23, 2025 11:23:49 AM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 23-09-2025 11:23:49 | GAME | TEXT | hej | null
+sep. 23, 2025 11:24:09 AM sample.service.JavaAuditLogger logEvent
+INFO: bob | 23-09-2025 11:24:09 | GAME | TEXT | FILE_OFFER kaj 4x matematik noter.docx | null
+sep. 23, 2025 11:24:17 AM sample.service.JavaAuditLogger logEvent
+INFO: bob | 23-09-2025 11:24:17 | GAME | FILE_OFFER | bob|1758619457121|FILE_OFFER|4x matematik noter.docx|17605738 | kaj
+sep. 23, 2025 11:24:24 AM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 23-09-2025 11:24:24 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 23, 2025 11:30:09 AM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 23-09-2025 11:30:09 | GAME | FILE_OFFER | kaj|1758619809154|FILE_OFFER|4x matematik noter.docx|17605738 | bob
+sep. 23, 2025 11:30:17 AM sample.service.JavaAuditLogger logEvent
+INFO: bob | 23-09-2025 11:30:17 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 23, 2025 11:33:55 AM sample.service.JavaAuditLogger logEvent
+INFO: bob | 23-09-2025 11:33:55 | GAME | FILE_OFFER | bob|1758620035742|FILE_OFFER|4x matematik noter.docx|17605738 | kaj
+sep. 23, 2025 11:34:00 AM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 23-09-2025 11:34:00 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 23, 2025 11:36:51 AM sample.service.JavaAuditLogger logEvent
+INFO: kaj | 23-09-2025 11:36:51 | GAME | FILE_OFFER | kaj|1758620211457|FILE_OFFER|4x matematik noter.docx|17605738 | bob
+sep. 23, 2025 11:36:56 AM sample.service.JavaAuditLogger logEvent
+INFO: bob | 23-09-2025 11:36:56 | GAME | FILE_ACCEPT | FILE_ACCEPT | null
+sep. 23, 2025 11:51:53 AM sample.service.JavaAuditLogger logEvent
+INFO: bob | 23-09-2025 11:51:53 | GAME | TEXT | hej | null
+sep. 23, 2025 12:04:05 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 23-09-2025 12:04:05 | GAME | HELP |  | null
+sep. 23, 2025 12:05:21 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 23-09-2025 12:05:21 | GAME | HELP |  | null
+sep. 23, 2025 12:05:55 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 23-09-2025 12:05:55 | GAME | EMOJI | null | null
+sep. 23, 2025 12:09:58 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 23-09-2025 12:09:58 | GAME | EMOJI | null | null
+sep. 23, 2025 12:12:05 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 23-09-2025 12:12:05 | GAME | EMOJI | ❤ | null
+sep. 23, 2025 12:21:51 PM sample.service.JavaAuditLogger logEvent
+INFO: bob | 23-09-2025 12:21:51 | GAME | EMOJI | ❤ | null

@@ -17,7 +17,7 @@ import java.util.Map;
 
 
 
-public class ServerFileService {
+public class ServerFileService implements IServerFileService {
     //    private Socket socket;
     private final MessageSender messageSender;
     private final Map<String, FileOffer> pendingFiles;
@@ -27,7 +27,7 @@ public class ServerFileService {
         this.pendingFiles = pendingFiles;
     }
 
-
+    @Override
     public String[] offerFile(Message message, String[] parts) {
         String sender = parts[0];
         String timestamp = parts[1];
@@ -40,6 +40,7 @@ public class ServerFileService {
         return new String[]{returnMessage, recipient};
     }
 
+    @Override
     public void acceptFile(User user, PrintWriter out) {
         FileOffer offer = pendingFiles.remove(user.getUsername());
         if (offer == null) {

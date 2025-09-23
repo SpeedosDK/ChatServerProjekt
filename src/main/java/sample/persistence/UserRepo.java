@@ -3,14 +3,16 @@ package sample.persistence;
 import org.mindrot.jbcrypt.BCrypt;
 import sample.Config.DatabaseConfig;
 import sample.domain.User;
+import sample.service.IUserRepository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserRepo {
+public class UserRepo implements IUserRepository {
 
+    @Override
     public boolean registerUser(User user)  {
         String sql = "insert into user(username, password) values (?,?)";
 
@@ -30,6 +32,7 @@ public class UserRepo {
             return false;
         }
     }
+    @Override
     public User findByUsername(String username) {
         String sql = "select * from user where username = ?";
 

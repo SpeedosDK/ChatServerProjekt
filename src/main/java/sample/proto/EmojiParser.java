@@ -5,9 +5,9 @@ import java.util.Map;
 
 
 
-public class EmojiParser {
+public class EmojiParser implements IEmojiParser{
 
-    private static final Map<String, Integer> EMOJI_MAP = Map.of(
+    private final Map<String, Integer> EMOJI_MAP = Map.of(
             "smile", 0x1F604,
             "laugh", 0x1F602,
             "thumbsup", 0x1F44D,
@@ -15,7 +15,7 @@ public class EmojiParser {
     );
 
 
-    public static String parseEmoji(String input)  {
+    public String parseEmoji(String input)  {
            input = input.trim();
 
             if (input.codePoints().count() == 1 && Character.isSurrogate(input.charAt(0))) {

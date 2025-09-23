@@ -2,11 +2,10 @@ package sample.net;
 
 import sample.domain.*;
 import sample.proto.EmojiParser;
+import sample.proto.IEmojiParser;
 import sample.proto.JsonMessageParser;
 import sample.proto.ParseException;
-import sample.service.ServerFileService;
-import sample.service.JavaAuditLogger;
-import sample.service.UserService;
+import sample.service.*;
 
 import java.net.*;
 import java.io.*;
@@ -18,7 +17,7 @@ import java.util.Map;
 
 public class ChatClienthandler implements Runnable, MessageSender {
     private final Socket socket;
-    private final UserService userService = new UserService();
+    private final IUserService userService;
     private final JsonMessageParser jsonMessageParser = new JsonMessageParser();
     private final JavaAuditLogger auditLogger = new JavaAuditLogger();
     private PrintWriter out;
@@ -30,9 +29,10 @@ public class ChatClienthandler implements Runnable, MessageSender {
     private final List<PrintWriter> chattingClients;
     private final List<PrintWriter> musicClients;
 
-    private ServerFileService serverFileService;
+    private final IServerFileService serverFileService;
+    private final IEmojiParser emojiParser;
 
-    public ChatClienthandler(Socket socket, Map<String, FileOffer> pendingFiles, Map<User ,PrintWriter> userMap, List<PrintWriter> gameClients, List<PrintWriter> chattingClients,List<PrintWriter> musicClients) {
+    public ChatClienthandler(Socket socket, Map<String, FileOffer> pendingFiles, Map<User ,PrintWriter> userMap, List<PrintWriter> gameClients, List<PrintWriter> chattingClients,List<PrintWriter> musicClients, IUserService userService, IEmojiParser emojiParser) {
         this.socket = socket;
         this.pendingFiles = pendingFiles;
         this.serverFileService = new ServerFileService(this,  pendingFiles);
@@ -40,6 +40,8 @@ public class ChatClienthandler implements Runnable, MessageSender {
         this.gameClients = gameClients;
         this.chattingClients = chattingClients;
         this.musicClients = musicClients;
+        this.userService = userService;
+        this.emojiParser = emojiParser;
     }
 
     @Override
@@ -83,6 +85,7 @@ public class ChatClienthandler implements Runnable, MessageSender {
                     break;
             }
             broadcast(userName + " er tilsluttet chatrummet " + user.getChatRoom(), getClientsByRoom(user.getChatRoom()));
+            unicast("Brug /HELP for at se kommandoer", userName);
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 try {
@@ -129,11 +132,18 @@ public class ChatClienthandler implements Runnable, MessageSender {
     }
     private void handleMessage (Message message){
         switch (message.chatType()) {
+            case HELP -> {
+                unicast("Disse kommandoer er tilgængelige:\n/TEXT for at sende beskeder\n/PRIVATE <modtager> for at sende privatbesked\n/EMOJI for at sende emoji\n/FILE_OFFER <modtager> <filnavn> for at sende en fil\n/JOIN_ROOM for at skifte rum", user.getUsername());
+            }
             case TEXT ->
                     broadcast(user.getUsername() + " | " + message.formattedTimestamp() + " | " + message.chatType() + " | " + message.payload(), getClientsByRoom(user.getChatRoom()));
             case EMOJI -> {
-                String emoji = EmojiParser.parseEmoji(message.payload());
-                broadcast(user.getUsername() + " | " + message.formattedTimestamp() + " | " + message.chatType() + " | " + emoji, getClientsByRoom(user.getChatRoom()));
+                String emoji = emojiParser.parseEmoji(message.payload());
+                if (emoji != null) {
+                    broadcast(user.getUsername() + " | " + message.formattedTimestamp() + " | " + message.chatType() + " | " + emoji, getClientsByRoom(user.getChatRoom()));
+                } else {
+                    unicast("Emoji ikke tilgængelig. Brug disse:\n:smile:\n:laugh:\n:thumbsup:\n:heart:", user.getUsername());
+                }
             }
 
             case FILE_OFFER -> {
@@ -166,6 +176,7 @@ public class ChatClienthandler implements Runnable, MessageSender {
             case JOIN_ROOM -> {
                 joinRoom(message);
             }
+
         }
     }
 

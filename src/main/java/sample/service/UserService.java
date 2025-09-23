@@ -4,15 +4,21 @@ import org.mindrot.jbcrypt.BCrypt;
 import sample.domain.User;
 import sample.persistence.UserRepo;
 
-public class UserService {
+public class UserService implements IUserService {
+    private final IUserRepository userRepo;
 
-    private UserRepo userRepo = new UserRepo();
+    public UserService(IUserRepository userRepo) {
+        this.userRepo = userRepo;
+    }
+
+    @Override
     public boolean register(User user) {
         if (userRepo.findByUsername(user.getUsername()) != null) {
             return false;
         }
         return userRepo.registerUser(user);
     }
+    @Override
     public User login(String username, String password) {
         User user = userRepo.findByUsername(username);
         if(user != null && BCrypt.checkpw(password, user.getPassword())) {

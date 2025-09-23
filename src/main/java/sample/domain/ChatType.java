@@ -8,5 +8,6 @@ public enum ChatType {
     PRIVATE,
     FILE_ACCEPT,
     FILE_REJECT,
-    FILE_PORT
+    FILE_PORT,
+    HELP
 }

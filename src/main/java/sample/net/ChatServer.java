@@ -1,7 +1,14 @@
 package sample.net;
 
+import sample.domain.ChatRoom;
 import sample.domain.FileOffer;
 import sample.domain.User;
+import sample.persistence.UserRepo;
+import sample.proto.EmojiParser;
+import sample.proto.IEmojiParser;
+import sample.service.IUserRepository;
+import sample.service.IUserService;
+import sample.service.UserService;
 
 import java.net.*;
 import java.io.*;
@@ -19,6 +26,9 @@ public class ChatServer {
     private final Map<User, PrintWriter> userMap = Collections.synchronizedMap(new HashMap<>());
 
     private final Map<String, FileOffer> pendingFiles = Collections.synchronizedMap(new HashMap<>());
+    private final IUserService userService;
+    private final IUserRepository userRepo;
+    private final IEmojiParser emojiParser;
 
     public int getPort() {
         return port;
@@ -39,6 +49,12 @@ public class ChatServer {
         return pendingFiles;
     }
 
+    public ChatServer(IUserService userService, IUserRepository userRepo, IEmojiParser emojiParser) {
+        this.userService = userService;
+        this.userRepo = userRepo;
+        this.emojiParser = emojiParser;
+    }
+
     public void start() {
         BlockingQueue<Runnable> queue = new ArrayBlockingQueue<>(100);
         ThreadPoolExecutor pool = new ThreadPoolExecutor(5, 5, 0, TimeUnit.SECONDS, queue);
@@ -49,7 +65,7 @@ public class ChatServer {
             while(true){
                 try {
                     Socket clientSocket = serverSocket.accept();
-                    pool.submit(new ChatClienthandler(clientSocket, this.getPendingFiles(), this.getUserMap(),this.getGameClients(), this.getChattingClients(), this.getMusicClients()));
+                    pool.submit(new ChatClienthandler(clientSocket, this.getPendingFiles(), this.getUserMap(),this.getGameClients(), this.getChattingClients(), this.getMusicClients(), this.userService, this.emojiParser));
 
                 } catch (IOException e) {
                     System.out.println("Fejl med klientforbindelsen" + e.getMessage());
@@ -64,7 +80,10 @@ public class ChatServer {
 
 
     public static void main(String[] args) {
-        ChatServer chatServer = new ChatServer();
+        IEmojiParser emojiParser = new EmojiParser();
+        IUserRepository userRepo = new UserRepo();
+        IUserService userService = new UserService(userRepo);
+        ChatServer chatServer = new ChatServer(userService, userRepo, emojiParser);
         chatServer.start();
     }
 }
