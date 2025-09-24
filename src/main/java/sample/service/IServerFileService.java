@@ -6,4 +6,5 @@ import java.io.PrintWriter;
 public interface IServerFileService {
     String[] offerFile(Message message, String[] parts);
     void acceptFile(User user, PrintWriter out);
+    void rejectFile(User user, PrintWriter out);
 }

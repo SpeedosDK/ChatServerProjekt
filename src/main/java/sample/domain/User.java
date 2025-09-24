@@ -1,16 +1,20 @@
 package sample.domain;
 
+import java.io.PrintWriter;
+
 public class User {
 
     private int id;
     private String username;
     private String password;
     private ChatRoom chatRoom;
+    private PrintWriter out;
 
-    public User(String username, String password, ChatRoom chatRoom) {
+    public User(String username, String password, ChatRoom chatRoom, PrintWriter out) {
         this.username = username;
         this.password = password;
         this.chatRoom = chatRoom;
+        this.out = out;
     }
     public User() {}
 
@@ -40,5 +44,11 @@ public class User {
     }
     public void setChatRoom(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
+    }
+    public PrintWriter getOut() {
+        return out;
+    }
+    public void setOut(PrintWriter out) {
+        this.out = out;
     }
 }

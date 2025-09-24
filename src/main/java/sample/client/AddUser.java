@@ -22,7 +22,7 @@ public class AddUser {
 
         String username = "kaj";
         String password = "123";
-        User user = new User(username, password, null);
+        User user = new User(username, password, null, null);
 
         addUser.registerUser(user);
     }

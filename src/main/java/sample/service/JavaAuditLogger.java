@@ -12,12 +12,13 @@ import sample.proto.IEmojiParser;
 
 public class JavaAuditLogger implements AuditLogger {
     private final IEmojiParser emojiParser = new EmojiParser();
-    private static final Logger eventLogger = Logger.getLogger("EventLogger");
-    private static final DateTimeFormatter DTF = DateTimeFormatter.ISO_INSTANT;
+    private final Logger eventLogger;
+    private final DateTimeFormatter DTF = DateTimeFormatter.ISO_INSTANT;
 
-    static {
+    public JavaAuditLogger(String logFilePath) {
+        eventLogger = Logger.getLogger("EventLogger-" + logFilePath);
         try {
-            FileHandler fileHandler = new FileHandler("Event.log", 1_000_000, 5, true);
+            FileHandler fileHandler = new FileHandler(logFilePath, 1_000_000, 5, true);
             fileHandler.setFormatter(new SimpleFormatter());
             eventLogger.addHandler(fileHandler);
             eventLogger.setUseParentHandlers(false);

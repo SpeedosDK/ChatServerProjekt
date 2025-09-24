@@ -4,6 +4,6 @@ import sample.domain.Message;
 
 
 
-public interface MessageParser {
+public interface IMessageParser {
     Message parseMessage(String message) throws ParseException;
 }

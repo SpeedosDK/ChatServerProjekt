@@ -41,27 +41,6 @@ public class ClientFileService implements IFileTransferService{
         }
     }
 
-//    public void receiveFile(String savePath, long fileSize){
-//        File file = new File(savePath);
-//        file.getParentFile().mkdirs();
-//        try (BufferedInputStream inputStream = new BufferedInputStream(socket.getInputStream());
-//             FileOutputStream fileOutputStream = new FileOutputStream(file)){
-//            byte[] buffer = new byte[4096];
-//            long totalRead = 0;
-//            while (totalRead < fileSize) {
-//                int bytesToRead = (int) Math.min(fileSize - totalRead, buffer.length);
-//                int bytesRead = inputStream.read(buffer, 0, bytesToRead);
-//                if (bytesRead == -1) {
-//                    break;
-//                }
-//                fileOutputStream.write(buffer, 0, bytesRead);
-//                totalRead += bytesRead;
-//            }
-//            System.out.println("Fil gemt som: " +  savePath);
-//        } catch (IOException e) {
-//            System.out.println("Fejl ved modtagelse af fil: " + e.getMessage());
-//        }
-//    }
 
     private void sendFileOnSeparateSocket(String filePath, String host, int port) {
         File file = new File(filePath);
@@ -107,6 +86,9 @@ public class ClientFileService implements IFileTransferService{
                 int read   = bis.read(buffer, 0, toRead);
                 if (read < 0) break;
                 fos.write(buffer, 0, read);
+                try {
+                    Thread.sleep(1);//For Caspers progress bar demo :-)
+                } catch (InterruptedException ignored) {}
                 total += read;
 
                 if (read > 0) {
@@ -134,7 +116,7 @@ public class ClientFileService implements IFileTransferService{
         bar.append("]");
         String eta = etaString(received, total, startNano);
 
-        System.out.printf("\r%s %d%% %s", bar.toString(), percent, eta);
+        System.out.print("\r" + bar + " " + percent + "% " + eta);
         System.out.flush();
     }
 

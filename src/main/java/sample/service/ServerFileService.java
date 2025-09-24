@@ -5,8 +5,7 @@ import sample.domain.ChatType;
 import sample.domain.FileOffer;
 import sample.domain.Message;
 import sample.domain.User;
-import sample.net.ChatClienthandler;
-import sample.net.MessageSender;
+import sample.net.IMessageSender;
 import sample.proto.MessageDTO;
 
 import java.io.*;
@@ -19,10 +18,10 @@ import java.util.Map;
 
 public class ServerFileService implements IServerFileService {
     //    private Socket socket;
-    private final MessageSender messageSender;
+    private final IMessageSender messageSender;
     private final Map<String, FileOffer> pendingFiles;
 
-    public ServerFileService(MessageSender messageSender, Map<String, FileOffer> pendingFiles) {
+    public ServerFileService(IMessageSender messageSender, Map<String, FileOffer> pendingFiles) {
         this.messageSender = messageSender;
         this.pendingFiles = pendingFiles;
     }
@@ -38,6 +37,15 @@ public class ServerFileService implements IServerFileService {
         pendingFiles.put(recipient, new FileOffer(sender, recipient, filename, fileSize));
         String returnMessage = (sender + " vil sende dig filen '" + filename + "' (Størrelse: " + fileSize + " bytes. Svar /FILE_ACCEPT eller /FILE_REJECT.");
         return new String[]{returnMessage, recipient};
+    }
+    @Override
+    public void rejectFile(User user, PrintWriter out) {
+        FileOffer offer = pendingFiles.remove(user.getUsername());
+        if (offer != null) {
+            messageSender.unicast("Bruger " + user.getUsername() + " har afvist din fil: " + offer.fileName, offer.sender);
+        } else {
+            user.getOut().println("Ingen ventende filer");
+        }
     }
 
     @Override

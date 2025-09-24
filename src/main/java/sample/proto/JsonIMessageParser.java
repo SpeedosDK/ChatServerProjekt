@@ -7,9 +7,8 @@ import sample.domain.Message;
 
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
-public class JsonMessageParser implements MessageParser {
+public class JsonIMessageParser implements IMessageParser {
 
     private final Gson gson = new Gson();
 
