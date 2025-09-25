@@ -11,7 +11,7 @@ public class ClientFileService implements IFileTransferService{
 
     @Override
     public void fileTransfer(MessageDTO msg, String pendingFileName, long pendingFileSize, String host) {
-        String[] parts = msg.payload().split("\\|");
+        String[] parts = msg.payload().split("\\|");//Deler ved hver pipe (eller hvad det nu hedder)
         int    filePort = Integer.parseInt(parts[0]);
         String role     = parts[1];
 

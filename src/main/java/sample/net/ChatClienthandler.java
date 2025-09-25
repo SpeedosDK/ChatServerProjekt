@@ -71,9 +71,9 @@ public class ChatClienthandler implements Runnable {
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 try {
-                    Message msg = jsonMessageParser.parseMessage(inputLine);
-                    context.auditLogger.logEvent(msg, user);
-                    context.messageHandler.handleMessage(msg, user);
+                    Message msg = jsonMessageParser.parseMessage(inputLine); //Parser beskeden fra json
+                    context.auditLogger.logEvent(msg, user); //logger eventen
+                    context.messageHandler.handleMessage(msg, user); //håndterer beskeden
                 } catch (Exception e) {
                     out.println("Fejl i besked: " + e.getMessage());
                 }

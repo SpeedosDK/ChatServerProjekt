@@ -34,12 +34,6 @@ public class JsonIMessageParser implements IMessageParser {
             } catch (IllegalArgumentException e) {
                 throw new ParseException("Chat type ukendt: " + dto.chatType, e);
             }
-//            Instant timestamp;
-//            if (dto.timestamp != null && !dto.timestamp.isBlank()) {
-//                timestamp = Instant.parse(dto.timestamp);
-//            } else {
-//                timestamp = Instant.now();
-//            }
 
             return new Message(dto.clientId, Instant.now(), chatType, dto.payload, dto.recipient);
         } catch (JsonSyntaxException e) {

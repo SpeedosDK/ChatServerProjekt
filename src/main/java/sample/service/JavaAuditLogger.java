@@ -18,7 +18,7 @@ public class JavaAuditLogger implements AuditLogger {
     public JavaAuditLogger(String logFilePath) {
         eventLogger = Logger.getLogger("EventLogger-" + logFilePath);
         try {
-            FileHandler fileHandler = new FileHandler(logFilePath, 1_000_000, 5, true);
+            FileHandler fileHandler = new FileHandler(logFilePath, 1_000_000, 5, true); //1mb pr log, 5 logs og så overskriver vi, og den tilføjer til tidligere fil :-)
             fileHandler.setFormatter(new SimpleFormatter());
             eventLogger.addHandler(fileHandler);
             eventLogger.setUseParentHandlers(false);
@@ -31,7 +31,7 @@ public class JavaAuditLogger implements AuditLogger {
     @Override
     public void logEvent(Message message, User user) {
         String logText;
-        if (message.chatType() == ChatType.EMOJI){
+        if (message.chatType() == ChatType.EMOJI){ //HVis emoji, laver den en flot emoji...
             String emoji = emojiParser.parseEmoji(message.payload());
             logText = String.format(message.clientId() + " | " + message.formattedTimestamp() + " | " + user.getChatRoom() + " | " + message.chatType() + " | " +  emoji + " | " + message.recipient());
             eventLogger.info(logText);

@@ -25,12 +25,12 @@ public class RoomService implements IRoomService {
     }
     @Override
     public void joinRoom(Message message, User user) {
-        removeClientFromRoom(user);
+        removeClientFromRoom(user); //Fjerner bruger fra et rum
         try {
             ChatRoom chatRoom = ChatRoom.valueOf(message.payload().trim().toUpperCase());
             user.setChatRoom(chatRoom);
             PrintWriter out = userMap.get(user);
-            getClientsByRoom(chatRoom).add(out);
+            getClientsByRoom(chatRoom).add(out); //Og tilføjer til et andet
             messageSender.broadcast("Bruger " + user.getUsername() + " har skiftet til chatrummet " + chatRoom, getClientsByRoom(chatRoom));
             out.println("Du er nu i rummet: " + chatRoom);
         } catch (IllegalArgumentException e) {

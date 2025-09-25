@@ -46,7 +46,7 @@ public class ChatServer {
     }
 
     public static void main(String[] args) {
-        ServerContext context = new ServerContext();
+        ServerContext context = new ServerContext(); //Context for at undgå konstruktør-helvede
         ChatServer server = new ChatServer(context);
         context.setMessageSender(new MessageBroadcaster(context)); // nu er alt sat
         server.start();

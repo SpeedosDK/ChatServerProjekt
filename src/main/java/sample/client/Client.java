@@ -29,13 +29,13 @@ public class Client {
 
     public void start(){
         try {
-            new File("files").mkdirs();
+            new File("files").mkdirs(); //Opretter directory hvis det ikke findes
             socket = new Socket(host, port);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
             boolean loggedIn = false;
             String username = "";
-            while (!loggedIn) {
+            while (!loggedIn) { //Løkke for login, så man ikke kommer videre hvis man ikke er logget ind
                 System.out.println("Indtast brugernavn");
                 username = input.nextLine();
                 out.println(username);
@@ -57,7 +57,7 @@ public class Client {
                 }
             }
 
-            Thread readerThread = new Thread(() -> {
+            Thread readerThread = new Thread(() -> { //Opretter læse-tråden
                 try {
                     // System.out.println("Skriv username og password");
                     String serverMessage;
@@ -78,30 +78,18 @@ public class Client {
                         // --- 2) Almindelig tekst-flow ---
                         System.out.println(serverMessage);
 
-                        if (serverMessage.contains("vil sende dig filen")) {
-                            String[] parts = serverMessage.split("'");
-                            if (parts.length >= 2) {
-                                pendingFileName = parts[1];
-                                String sizePart = serverMessage.split("Størrelse: ")[1].split(" ")[0];
-                                pendingFileSize = Long.parseLong(sizePart);
-                            }
-                        }
-
-//                        if (serverMessage.startsWith("Filoverførsel starter")) {
-//                            fileService.receiveFile("received_files/" + pendingFileName, pendingFileSize);
-//                        }
                     }
 
                 } catch (IOException e) {
                     System.out.println("Fejl i besked: " + e.getMessage());
                 }
             });
-            readerThread.start();
+            readerThread.start(); //Starter læse-tråden
             while (true) {
                 try {
                     String rawInput = input.nextLine();
                     if (rawInput.startsWith("/")) {
-                        String[] parts = rawInput.trim().split("\\s+", 3);
+                        String[] parts = rawInput.trim().split("\\s+", 3); //\\s+ betyder mellemrum og limit 3 vil sige at den tager de 2 første mellemrum og deler
                         ChatType command = ChatType.valueOf(parts[0].substring(1));
                         if (command == ChatType.PRIVATE) {
                             if (parts.length < 3) {
