@@ -7,7 +7,8 @@ import java.net.Socket;
 
 public class ClientFileService implements IFileTransferService{
     private Socket socket;
-    private static final int BAR_WITDH = 50;
+    private static final int BAR_WITDH = 39;
+    private static final String casperFunk = "BrazilianFunk";
 
     @Override
     public void fileTransfer(MessageDTO msg, String pendingFileName, long pendingFileSize, String host) {
@@ -111,11 +112,16 @@ public class ClientFileService implements IFileTransferService{
     }
 
     private static void printProgressBar(int percent, long received, long total, long startNano) {
-        int filled = (int)((percent / 100.0) * BAR_WITDH);
+        int filled = (int) ((percent / 100.0) * BAR_WITDH);
         StringBuilder bar = new StringBuilder();
         bar.append("[");
         for (int i = 0; i < BAR_WITDH; i++) {
-            bar.append(i < filled ? '=':' ');
+            if (i < filled) {
+                char c = casperFunk.charAt(i % casperFunk.length());
+                bar.append(c);
+            } else {
+                bar.append(' ');
+            }
         }
         bar.append("]");
         String eta = etaString(received, total, startNano);
