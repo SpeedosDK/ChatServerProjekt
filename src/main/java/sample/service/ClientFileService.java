@@ -32,6 +32,7 @@ public class ClientFileService implements IFileTransferService{
             }
 
         } else if (role.equals("DOWNLOAD")) {
+
             // Modtager skal downloade fra serveren
             String fileName = parts[2];
             long   fileSize = Long.parseLong(parts[3]);
@@ -73,7 +74,9 @@ public class ClientFileService implements IFileTransferService{
                                              String host,
                                              int port,
                                              long fileSize) {
-
+        try {
+            Thread.sleep(1000); // 1 sekund forsinkelse
+        } catch (InterruptedException ignored) {}
 
         try (
                 Socket sock = new Socket(host, port);
