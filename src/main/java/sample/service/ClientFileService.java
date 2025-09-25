@@ -26,11 +26,6 @@ public class ClientFileService implements IFileTransferService{
                     )
             );
             uploadThread.start();
-            try {
-                uploadThread.join();
-            } catch (InterruptedException e) {
-                System.out.println("Fejl i upload: " + e);
-            }
 
         } else if (role.equals("DOWNLOAD")) {
             // Modtager skal downloade fra serveren
