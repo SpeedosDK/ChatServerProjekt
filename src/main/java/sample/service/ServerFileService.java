@@ -56,9 +56,11 @@ public class ServerFileService implements IServerFileService {
             return;
         }
 
-        int filePort;
-        try (ServerSocket tmp = new ServerSocket(0)) {
-            filePort = tmp.getLocalPort();
+        int uploadPort, downloadPort;
+        try (ServerSocket tmp = new ServerSocket(0);
+             ServerSocket tmp2 = new ServerSocket(0)) {
+            uploadPort = tmp.getLocalPort();
+            downloadPort = tmp2.getLocalPort();
         } catch (IOException e) {
             out.println("Kunne ikke allokere port til filtransfer");
             e.printStackTrace();
@@ -67,8 +69,8 @@ public class ServerFileService implements IServerFileService {
 
 
         // Nu er filePort garanteret initialiseret
-        MessageDTO toSender = getDtoToSender(filePort, offer);
-        MessageDTO toReceiver = getDtoToReceiver(filePort, offer);
+        MessageDTO toSender = getDtoToSender(uploadPort, offer);
+        MessageDTO toReceiver = getDtoToReceiver(downloadPort, offer);
         messageSender.unicast(new Gson().toJson(toSender), offer.sender);
         messageSender.unicast(new Gson().toJson(toReceiver), offer.recipient);
 
@@ -82,11 +84,11 @@ public class ServerFileService implements IServerFileService {
                     return; // Stop tråden hvis mappen ikke kan oprettes
                 }
             }
-            try (ServerSocket srv = new ServerSocket(filePort)) {
+            try (ServerSocket uploadSrv = new ServerSocket(uploadPort); // Upload og download server socket sørger for at den venter på at serveren er klar til at downloade fil der fra
+                 ServerSocket downloadSrv = new ServerSocket(downloadPort)) {
                 // Upload fra afsender
-
                 try (
-                        Socket uploadSock = srv.accept();
+                        Socket uploadSock = uploadSrv.accept();
                         BufferedInputStream bis = new BufferedInputStream(uploadSock.getInputStream());
                         FileOutputStream fos = new FileOutputStream("server_files/" + offer.fileName)
                 ) {
@@ -101,7 +103,7 @@ public class ServerFileService implements IServerFileService {
 
                 // Download til modtager
                 try (
-                        Socket downloadSock = srv.accept();
+                        Socket downloadSock = downloadSrv.accept();
                         BufferedOutputStream bos = new BufferedOutputStream(downloadSock.getOutputStream());
                         FileInputStream fis = new FileInputStream("server_files/" + offer.fileName)
                 ) {
