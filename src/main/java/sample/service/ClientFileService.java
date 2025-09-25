@@ -17,27 +17,34 @@ public class ClientFileService implements IFileTransferService{
 
         if (role.equals("UPLOAD")) {
             // Afsender skal uploade til serveren
-            new Thread(() ->
+            Thread uploadThread = new Thread(() ->
                     sendFileOnSeparateSocket(
                             "files/" + pendingFileName,
                             host,
                             filePort
                     )
-            ).start();
+            );
+            uploadThread.start();
+            try {
+                uploadThread.join();
+            } catch (InterruptedException e) {
+                System.out.println("Fejl i upload: " + e);
+            }
 
         } else if (role.equals("DOWNLOAD")) {
             // Modtager skal downloade fra serveren
             String fileName = parts[2];
             long   fileSize = Long.parseLong(parts[3]);
 
-            new Thread(() ->
+            Thread downloadThread = new Thread(() ->
                     receiveFileOnSeparateSocket(
                             "received_files/" + fileName,
                             host,
                             filePort,
                             fileSize
                     )
-            ).start();
+            );
+            downloadThread.start();
         }
     }
 
@@ -66,9 +73,7 @@ public class ClientFileService implements IFileTransferService{
                                              String host,
                                              int port,
                                              long fileSize) {
-        try {
-            Thread.sleep(1000); // 1 sekund forsinkelse
-        } catch (InterruptedException ignored) {}
+
 
         try (
                 Socket sock = new Socket(host, port);
